@@ -13,6 +13,7 @@
                     <th scope="col">Response code</th>
                 </tr>
             </thead>
+            @if($urls->count() > 0)
             <tbody>
                 @foreach($urls as $url)
                     <tr>
@@ -25,6 +26,7 @@
                     </tr>
                 @endforeach
             </tbody>
+            @endif
         </table>
         </div>
     </div>
