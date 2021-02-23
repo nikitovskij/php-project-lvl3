@@ -1,8 +1,8 @@
-@extends('layout')
+@extends('layouts.app')
 
 @section('title', 'All urls')
 
-@section('store')
+@section('content')
     <div class="jumbotron jumbotron-fluid bg-dark">
         <div class="container-lg">
             <div class="row">

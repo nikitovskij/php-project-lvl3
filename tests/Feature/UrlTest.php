@@ -50,6 +50,7 @@ class UrlTest extends TestCase
                 'name' => self::INVALID_FAKE_URL
             ]
         ]);
+        $this->assertDatabaseMissing('urls', ['name' => self::INVALID_FAKE_URL]);
         $response->assertRedirect(route('index'));
         $response->assertSessionHasErrors(['url.name' => 'Invalid URL provided']);
     }

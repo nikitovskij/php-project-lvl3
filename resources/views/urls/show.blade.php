@@ -1,6 +1,6 @@
-@extends('layout')
+@extends('layouts.app')
 
-@section('url')
+@section('content')
     <div class="container-lg">
         <h1 class="mt-5 mb-3">Website: {{ $url->name }}</h1>
         <div class="table-responsive">
@@ -26,21 +26,35 @@
             </table>
         </div>
         <h2 class="mt-5 mb-3">Checks</h2>
-        <form method="post" action="#" class="mb-3 mt-3">
+        <form method="post" action="{{ route('url_checks.store', ['id' => $url->id]) }}" class="mb-3 mt-3">
             @csrf
             <input type="submit" class="btn btn-primary" value="Run the check">
         </form>
         <table class="table table-bordered table-hover text-nowrap">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Код ответа</th>
-                    <th>h1</th>
-                    <th>keywords</th>
-                    <th>description</th>
-                    <th>Дата создания</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Status code</th>
+                    <th scope="col">h1</th>
+                    <th scope="col">Keywords</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Creation date</th>
                 </tr>
             </thead>
+            @isset($urlChecks)
+                <tbody>
+                @foreach($urlChecks as $urlCheck)
+                    <tr>
+                        <td>{{ $urlCheck->id }}</td>
+                        <td>{{ $urlCheck->status_code }}</td>
+                        <td>{{ $urlCheck->h1 }}</td>
+                        <td>{{ $urlCheck->keywords }}</td>
+                        <td>{{ $urlCheck->description }}</td>
+                        <td>{{ $urlCheck->created_at }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+            @endif
         </table>
     </div>
 @endsection

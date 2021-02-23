@@ -1,6 +1,6 @@
-@extends('layout')
+@extends('layouts.app')
 
-@section('urls')
+@section('content')
     <div class="container-lg">
         <h1 class="mt-5 mb-3">Websites</h1>
         <div class="table-responsive">
@@ -13,7 +13,7 @@
                     <th scope="col">Response code</th>
                 </tr>
             </thead>
-            @if($urls->count() > 0)
+            @isset($urls)
             <tbody>
                 @foreach($urls as $url)
                     <tr>

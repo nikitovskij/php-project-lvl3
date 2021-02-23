@@ -23,16 +23,6 @@ class UrlController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create(): Response
-    {
-        //
-    }
-
-    /**
      * @param Request $request
      * @return RedirectResponse
      */
@@ -78,43 +68,15 @@ class UrlController extends Controller
     {
         $url = DB::table('urls')->where('id', $id)->first();
         if ($url === null) {
-            abort(404, 'URL not found.');
+            abort(404);
         }
 
-        return view('urls.show', ['url' => $url]);
-    }
+        $urlChecks = DB::table('url_checks')
+            ->where('url_id', '=', $id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->toArray();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function edit(int $id): Response
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
-    public function update(Request $request, int $id): Response
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function destroy(int $id): Response
-    {
-        //
+        return view('urls.show', ['url' => $url, 'urlChecks' => $urlChecks]);
     }
 }
