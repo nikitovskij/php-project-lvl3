@@ -12,7 +12,7 @@ class UrlChecksTest extends TestCase
 
     private string $html;
 
-    private object $url;
+    private object $urls;
 
     public function setUp(): void
     {
@@ -22,7 +22,7 @@ class UrlChecksTest extends TestCase
         );
         $this->artisan('migrate');
         $this->artisan('db:seed --class=UrlChecksSeeder');
-        $this->url = DB::table('urls')->where('name', '=', self::FAKE_URL)->get()->first();
+        $this->urls = DB::table('urls')->where('name', '=', self::FAKE_URL)->get();
     }
 
     public function testStore(): void
@@ -31,11 +31,12 @@ class UrlChecksTest extends TestCase
             self::FAKE_URL => Http::response($this->html, 200),
         ]);
 
-        $response = $this->post(route('url_checks.store', ['id' => $this->url->id]));
+        $url = $this->urls->first();
+        $response = $this->post(route('url_checks.store', ['id' => $url->id]));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('url_checks', [
-            'url_id' => $this->url->id,
+            'url_id' => $url->id,
             'status_code' => 200,
             'h1' => 'Test successful!',
             'keywords' => 'one,two,three',
