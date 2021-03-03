@@ -12,26 +12,30 @@ class UrlChecksTest extends TestCase
 
     private string $html;
 
+    private object $url;
+
     public function setUp(): void
     {
         parent::setUp();
-        $this->html = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Fixtures', 'index.html']));
+        $this->html = (string) file_get_contents(
+            implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Fixtures', 'index.html'])
+        );
         $this->artisan('migrate');
         $this->artisan('db:seed --class=UrlChecksSeeder');
+        $this->url = DB::table('urls')->where('name', '=', self::FAKE_URL)->get()->first();
     }
 
-    public function testStore()
+    public function testStore(): void
     {
-        $url = DB::table('urls')->where('name', '=', self::FAKE_URL)->first();
         Http::fake([
             self::FAKE_URL => Http::response($this->html, 200),
         ]);
 
-        $response = $this->post(route('url_checks.store', ['id' => $url->id]));
+        $response = $this->post(route('url_checks.store', ['id' => $this->url->id]));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('url_checks', [
-            'url_id' => $url->id,
+            'url_id' => $this->url->id,
             'status_code' => 200,
             'h1' => 'Test successful!',
             'keywords' => 'one,two,three',

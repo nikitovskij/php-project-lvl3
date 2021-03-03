@@ -19,20 +19,20 @@ class UrlTest extends TestCase
         $this->artisan('db:seed --class=UrlSeeder');
     }
 
-    public function testIndex()
+    public function testIndex(): void
     {
         $response = $this->get(route('index'));
         $response->assertOk();
     }
 
-    public function testUrlsIndex()
+    public function testUrlsIndex(): void
     {
         $response = $this->get(route('urls.index'));
         $this->assertDatabaseCount('urls', self::FAKE_URL_COUNT);
         $response->assertOk();
     }
 
-    public function testUrlsStoreSuccess()
+    public function testUrlsStoreSuccess(): void
     {
         $response = $this->post(route('urls.store'), [
             'url' => [
@@ -43,7 +43,7 @@ class UrlTest extends TestCase
         $response->assertRedirect(route('urls.show', ['url' => self::FAKE_URL_COUNT + 1]));
     }
 
-    public function testUrlsStoreFail()
+    public function testUrlsStoreFail(): void
     {
         $response = $this->post(route('urls.store'), [
             'url' => [
@@ -55,7 +55,7 @@ class UrlTest extends TestCase
         $response->assertSessionHasErrors(['url.name' => 'Invalid URL provided']);
     }
 
-    public function testUrlsShow()
+    public function testUrlsShow(): void
     {
         $response = $this->get(route('urls.show', ['url' => self::FAKE_URL_COUNT]));
         $response->assertOk();

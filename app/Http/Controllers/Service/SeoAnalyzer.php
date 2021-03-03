@@ -6,7 +6,7 @@ use DiDom\Document;
 
 class SeoAnalyzer
 {
-    public static function analyze($html)
+    public static function analyze(string $html): array
     {
         $document = new Document($html);
 

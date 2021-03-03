@@ -12,15 +12,6 @@
 <body class="d-flex flex-column">
 @include('navbar')
 @include('flash::message')
-@if ($errors->any())
-    <div class="alert alert-danger mb-0">
-        <ul class="list-style ps-0 mb-0">
-            @foreach( $errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 <main class="flex-grow-1">
     @yield('content')
 </main>

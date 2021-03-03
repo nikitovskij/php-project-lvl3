@@ -8,8 +8,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class UrlController extends Controller
 {
@@ -28,19 +28,25 @@ class UrlController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
+        $validated = Validator::make($request->all(), [
             'url.name' => 'required|url'
         ], [
             'required' => 'URL is required',
             'url' => 'Invalid URL provided'
         ]);
 
+        if ($validated->fails()) {
+            flash($validated->errors()->first())->error();
+            return redirect()->route('index')->withErrors($validated->errors());
+        }
+
         [
             'scheme' => $scheme,
             'host' => $host
-        ] = parse_url($validated['url']['name']);
+        ] = parse_url($request->input('url.name'));
         $uri = implode('://', [$scheme, $host]);
         $url = DB::table('urls')->where('name', $uri)->first();
+        $urlId = null;
 
         if ($url === null) {
             $createdAt = $updatedAt = Carbon::now();

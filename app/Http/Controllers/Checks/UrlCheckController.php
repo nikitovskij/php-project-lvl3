@@ -7,12 +7,13 @@ use App\Http\Controllers\Service\SeoAnalyzer;
 use Carbon\Carbon;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class UrlCheckController extends Controller
 {
-    public function store(int $urlId)
+    public function store(int $urlId): RedirectResponse
     {
         $url = DB::table('urls')->find($urlId);
         try {
