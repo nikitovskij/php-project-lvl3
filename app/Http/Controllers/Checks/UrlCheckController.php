@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Checks;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Service\SeoAnalyzer;
 use Carbon\Carbon;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
@@ -16,10 +17,15 @@ class UrlCheckController extends Controller
         $url = DB::table('urls')->find($urlId);
         try {
             $response = Http::get(trim($url->name));
+            $document = SeoAnalyzer::analyze($response->body());
             $created_at = $updated_at = Carbon::now();
+
             DB::table('url_checks')->insert([
-                'status_code' => $response->status(),
                 'url_id' => $urlId,
+                'status_code' => $response->status(),
+                'h1' => $document['h1'],
+                'keywords' => $document['keywords'],
+                'description' => $document['description'],
                 'created_at' => $created_at,
                 'updated_at' => $updated_at
             ]);

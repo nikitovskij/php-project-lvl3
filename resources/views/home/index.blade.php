@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'All urls')
+@section('title', 'Analyzer')
 
 @section('content')
     <div class="jumbotron jumbotron-fluid bg-dark">

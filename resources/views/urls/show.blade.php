@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', "Url SEO checks")
+
 @section('content')
     <div class="container-lg">
         <h1 class="mt-5 mb-3">Website: {{ $url->name }}</h1>
@@ -47,9 +49,9 @@
                     <tr>
                         <td>{{ $urlCheck->id }}</td>
                         <td>{{ $urlCheck->status_code }}</td>
-                        <td>{{ $urlCheck->h1 }}</td>
-                        <td>{{ $urlCheck->keywords }}</td>
-                        <td>{{ $urlCheck->description }}</td>
+                        <td>{{ Str::limit($urlCheck->h1, 10) }}</td>
+                        <td>{{ Str::limit($urlCheck->keywords, 10) }}</td>
+                        <td>{{ Str::limit($urlCheck->description, 30) }}</td>
                         <td>{{ $urlCheck->created_at }}</td>
                     </tr>
                 @endforeach

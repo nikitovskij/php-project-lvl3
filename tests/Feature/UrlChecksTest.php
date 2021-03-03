@@ -10,9 +10,12 @@ class UrlChecksTest extends TestCase
 {
     private const FAKE_URL = 'https://test.com';
 
+    private string $html;
+
     public function setUp(): void
     {
         parent::setUp();
+        $this->html = file_get_contents(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'Fixtures', 'index.html']));
         $this->artisan('migrate');
         $this->artisan('db:seed --class=UrlChecksSeeder');
     }
@@ -21,15 +24,18 @@ class UrlChecksTest extends TestCase
     {
         $url = DB::table('urls')->where('name', '=', self::FAKE_URL)->first();
         Http::fake([
-            self::FAKE_URL => Http::response(null, 200),
+            self::FAKE_URL => Http::response($this->html, 200),
         ]);
 
         $response = $this->post(route('url_checks.store', ['id' => $url->id]));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('url_checks', [
-            'url_id'   => $url->id,
-            'status_code' => 200
+            'url_id' => $url->id,
+            'status_code' => 200,
+            'h1' => 'Test successful!',
+            'keywords' => 'one,two,three',
+            'description' => 'test website',
         ]);
     }
 }
