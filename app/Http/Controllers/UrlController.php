@@ -42,7 +42,7 @@ class UrlController extends Controller
         $uri = implode('://', [$scheme, $host]);
         $url = DB::table('urls')->where('name', $uri)->first();
 
-        if($url === null) {
+        if ($url === null) {
             $createdAt = $updatedAt = Carbon::now();
             $urlId = DB::table('urls')->insertGetId([
                 'name' => $uri,
